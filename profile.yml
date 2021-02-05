@@ -1,0 +1,32 @@
+Resources:
+  User:
+    Type: 'AWS::IAM::User'
+    Properties:
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: 's3:*'
+                Resource: !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - 'bucketname'
+                    - /*
+        - PolicyName: IAMAccess
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                NotAction: 'iam:*'
+                Resource: '*'
+        - PolicyName: EC2Access
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: 'ec2:*'
+                Resource: '*'
+
+  HostKeys:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref User
